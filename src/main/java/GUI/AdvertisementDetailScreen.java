@@ -1,0 +1,976 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
+ */
+package GUI;
+
+import advertisement.abstracts.House;
+import advertisement.concretes.Advertisement;
+import advertisement.concretes.Apartment;
+import advertisement.concretes.Comment;
+import advertisement.concretes.HouseFactory;
+import advertisement.concretes.Manor;
+import advertisement.concretes.TreeHouse;
+import advertisement.concretes.Villa;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultCellEditor;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+import user.concretes.Customer;
+import user.concretes.HouseOwner;
+
+/**
+ *
+ * @author EmreOzkaya
+ */
+public class AdvertisementDetailScreen extends javax.swing.JFrame {
+
+    /**
+     * Creates new form advertisementDetailPage
+     */
+    DefaultTableModel dfmodel = new DefaultTableModel();
+    DefaultTableModel dfmodelforPersonnel = new DefaultTableModel();
+
+    private int advertisementId;
+    private int houseId;
+    private boolean isCommentZoom = false;
+
+    private int personId;
+    ArrayList<byte[]> images = new ArrayList();
+    ArrayList<Comment> commentList = new ArrayList();
+    Advertisement ad = new Advertisement();
+    PreparedStatement pst;
+    Connection db = Singleton.SingletonConnection.getCon();
+    Statement st;
+    ResultSet rs;
+
+    public void viewAdvertisementDetails(int advertisementId, int houseId, int personId) {
+        contentScroll.getVerticalScrollBar().setUnitIncrement(20);
+        this.advertisementId = advertisementId;
+        this.houseId = houseId;
+        this.personId = personId;
+        ad = ad.showDetailedInfo(advertisementId);
+        advertisementName.setText(ad.getAdvertisementName());
+        images = ad.getHouse().getImages();
+        Image img = Toolkit.getDefaultToolkit().createImage(images.get(0)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        ImageIcon imgicn = new ImageIcon(img);
+        image1.setIcon(imgicn);
+        img = Toolkit.getDefaultToolkit().createImage(images.get(1)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        imgicn = new ImageIcon(img);
+        image2.setIcon(imgicn);
+        img = Toolkit.getDefaultToolkit().createImage(images.get(2)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        imgicn = new ImageIcon(img);
+        image3.setIcon(imgicn);
+        img = Toolkit.getDefaultToolkit().createImage(images.get(3)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        imgicn = new ImageIcon(img);
+        image4.setIcon(imgicn);
+        img = Toolkit.getDefaultToolkit().createImage(images.get(4)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        imgicn = new ImageIcon(img);
+        image5.setIcon(imgicn);
+        img = Toolkit.getDefaultToolkit().createImage(images.get(5)).getScaledInstance(178, 135, Image.SCALE_SMOOTH);
+        imgicn = new ImageIcon(img);
+        image6.setIcon(imgicn);
+        addressText.setText(ad.getHouse().getLocation());
+        dailyPriceText.setText(String.valueOf(ad.getPrice()));
+        houseTypeText.setText(ad.getAdvertisementType());
+        vehicleParkText.setText(String.valueOf(ad.getHouse().isHasVehiclePark()));
+        heatingTypeText.setText(ad.getHouse().getHeating());
+        roomNumberText.setText(ad.getHouse().getRoomNumber());
+        shortDescriptionText.setText(ad.getHouse().getShortDescription());
+        if (ad.getHouseOwnerId() == personId) {
+            this.jPanel2.add(deleteButton);
+            deleteButton.setBounds(10, 10, 34, 34);
+            deleteButton.show();
+            this.jPanel2.add(updateButton);
+            updateButton.setBounds(60, 10, 34, 34);
+            updateButton.show();
+        }
+        populateCommentTable();
+
+    }
+
+    public AdvertisementDetailScreen() {
+        initComponents();
+        Toolkit toolkit = getToolkit();
+        Dimension size = toolkit.getScreenSize();
+        setLocation(size.width / 2 - getWidth() / 2, size.height / 2 - getHeight() / 2);
+    }
+
+    public void populateCommentTable() {
+        Comment comment = new Comment();
+        comment.setAdvertisementId(advertisementId);
+        commentList = comment.getAllComments();
+        dfmodel.setRowCount(0);
+        dfmodel = (DefaultTableModel) jTable1.getModel();
+        dfmodel.getColumnClass(0);
+        Advertisement ad = new Advertisement();
+        for (Comment commitem : commentList) {
+            Object tbData[] = {commitem.getUserName(), commitem.getContent(), commitem.getPoint()};
+            dfmodel.addRow(tbData);
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        deleteButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        contentScroll = new javax.swing.JScrollPane();
+        jPanel2 = new javax.swing.JPanel();
+        image1 = new javax.swing.JButton();
+        image2 = new javax.swing.JButton();
+        image3 = new javax.swing.JButton();
+        image4 = new javax.swing.JButton();
+        image5 = new javax.swing.JButton();
+        image6 = new javax.swing.JButton();
+        advertisementName = new javax.swing.JLabel();
+        houseTypeLabel = new javax.swing.JLabel();
+        houseTypeText = new javax.swing.JTextField();
+        heatingTypeLabel = new javax.swing.JLabel();
+        heatingTypeText = new javax.swing.JTextField();
+        dailyPriceLabel = new javax.swing.JLabel();
+        dailyPriceText = new javax.swing.JTextField();
+        roomNumberLabel = new javax.swing.JLabel();
+        roomNumberText = new javax.swing.JTextField();
+        vehicleParkLabel = new javax.swing.JLabel();
+        vehicleParkText = new javax.swing.JTextField();
+        addressLabel = new javax.swing.JLabel();
+        shortDescriptionLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        shortDescriptionText = new javax.swing.JTextArea();
+        commentPanel1 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jTextArea5 = new javax.swing.JTextArea();
+        jLabel1 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jSpinner1 = new javax.swing.JSpinner();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jButton2 = new javax.swing.JButton();
+        hireStartDate = new javax.swing.JFormattedTextField();
+        hireFinishDate = new javax.swing.JFormattedTextField();
+        addressText = new javax.swing.JTextField();
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User Name", "Point", "Comment", "Block", "Delete"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable2.setAutoscrolls(false);
+        jScrollPane3.setViewportView(jTable2);
+        if (jTable2.getColumnModel().getColumnCount() > 0) {
+            jTable2.getColumnModel().getColumn(0).setResizable(false);
+            jTable2.getColumnModel().getColumn(1).setResizable(false);
+            jTable2.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        deleteButton.setBackground(new java.awt.Color(51, 51, 51));
+        deleteButton.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        deleteButton.setForeground(new java.awt.Color(255, 255, 255));
+        deleteButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\emrec\\OneDrive\\Masaüstü\\airbnb_desktop\\src\\main\\img\\img\\delete.png")); // NOI18N
+        deleteButton.setBorder(null);
+        deleteButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        deleteButton.setDefaultCapable(false);
+        deleteButton.setFocusPainted(false);
+        deleteButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                deleteButtonMouseClicked(evt);
+            }
+        });
+        deleteButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                deleteButtonActionPerformed(evt);
+            }
+        });
+
+        updateButton.setBackground(new java.awt.Color(51, 51, 51));
+        updateButton.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        updateButton.setForeground(new java.awt.Color(255, 255, 255));
+        updateButton.setIcon(new javax.swing.ImageIcon("C:\\Users\\emrec\\OneDrive\\Masaüstü\\airbnb_desktop\\src\\main\\img\\img\\updating.png")); // NOI18N
+        updateButton.setBorder(null);
+        updateButton.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        updateButton.setDefaultCapable(false);
+        updateButton.setFocusPainted(false);
+        updateButton.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                updateButtonMouseClicked(evt);
+            }
+        });
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(255, 90, 95));
+        jPanel1.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.setAutoscrolls(true);
+        jPanel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jPanel1.setPreferredSize(new java.awt.Dimension(1330, 800));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel2.setBackground(new java.awt.Color(51, 51, 51));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255)));
+
+        image1.setBackground(new java.awt.Color(51, 51, 51));
+        image1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image1.setForeground(new java.awt.Color(255, 255, 255));
+        image1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                image1MouseClicked(evt);
+            }
+        });
+        image1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image1ActionPerformed(evt);
+            }
+        });
+
+        image2.setBackground(new java.awt.Color(51, 51, 51));
+        image2.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image2.setForeground(new java.awt.Color(255, 255, 255));
+        image2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                image2MouseClicked(evt);
+            }
+        });
+        image2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image2ActionPerformed(evt);
+            }
+        });
+
+        image3.setBackground(new java.awt.Color(51, 51, 51));
+        image3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image3.setForeground(new java.awt.Color(255, 255, 255));
+        image3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                image3MouseClicked(evt);
+            }
+        });
+        image3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image3ActionPerformed(evt);
+            }
+        });
+
+        image4.setBackground(new java.awt.Color(51, 51, 51));
+        image4.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image4.setForeground(new java.awt.Color(255, 255, 255));
+        image4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image4ActionPerformed(evt);
+            }
+        });
+
+        image5.setBackground(new java.awt.Color(51, 51, 51));
+        image5.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image5.setForeground(new java.awt.Color(255, 255, 255));
+        image5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image5ActionPerformed(evt);
+            }
+        });
+
+        image6.setBackground(new java.awt.Color(51, 51, 51));
+        image6.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        image6.setForeground(new java.awt.Color(255, 255, 255));
+        image6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                image6ActionPerformed(evt);
+            }
+        });
+
+        advertisementName.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        advertisementName.setForeground(new java.awt.Color(255, 255, 255));
+        advertisementName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        advertisementName.setText("Advertisement Name");
+
+        houseTypeLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        houseTypeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        houseTypeLabel.setText("House Type : ");
+
+        houseTypeText.setEditable(false);
+        houseTypeText.setBackground(new java.awt.Color(51, 51, 51));
+        houseTypeText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        houseTypeText.setForeground(new java.awt.Color(255, 255, 255));
+        houseTypeText.setText("asdasda");
+        houseTypeText.setToolTipText("");
+
+        heatingTypeLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        heatingTypeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        heatingTypeLabel.setText("Heating Type : ");
+
+        heatingTypeText.setEditable(false);
+        heatingTypeText.setBackground(new java.awt.Color(51, 51, 51));
+        heatingTypeText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        heatingTypeText.setForeground(new java.awt.Color(255, 255, 255));
+        heatingTypeText.setText("asdasda");
+        heatingTypeText.setToolTipText("");
+
+        dailyPriceLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        dailyPriceLabel.setForeground(new java.awt.Color(255, 255, 255));
+        dailyPriceLabel.setText("Daily Price : ");
+
+        dailyPriceText.setEditable(false);
+        dailyPriceText.setBackground(new java.awt.Color(51, 51, 51));
+        dailyPriceText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        dailyPriceText.setForeground(new java.awt.Color(255, 255, 255));
+        dailyPriceText.setText("asdasda");
+        dailyPriceText.setToolTipText("");
+
+        roomNumberLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        roomNumberLabel.setForeground(new java.awt.Color(255, 255, 255));
+        roomNumberLabel.setText("Room Number :");
+
+        roomNumberText.setEditable(false);
+        roomNumberText.setBackground(new java.awt.Color(51, 51, 51));
+        roomNumberText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        roomNumberText.setForeground(new java.awt.Color(255, 255, 255));
+        roomNumberText.setText("asdasda");
+        roomNumberText.setToolTipText("");
+
+        vehicleParkLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        vehicleParkLabel.setForeground(new java.awt.Color(255, 255, 255));
+        vehicleParkLabel.setText("Vehicle Park :");
+
+        vehicleParkText.setEditable(false);
+        vehicleParkText.setBackground(new java.awt.Color(51, 51, 51));
+        vehicleParkText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        vehicleParkText.setForeground(new java.awt.Color(255, 255, 255));
+        vehicleParkText.setText("asdasda");
+        vehicleParkText.setToolTipText("");
+
+        addressLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        addressLabel.setForeground(new java.awt.Color(255, 255, 255));
+        addressLabel.setText("Address :");
+
+        shortDescriptionLabel.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        shortDescriptionLabel.setForeground(new java.awt.Color(255, 255, 255));
+        shortDescriptionLabel.setText("Short Description : ");
+
+        shortDescriptionText.setEditable(false);
+        shortDescriptionText.setBackground(new java.awt.Color(51, 51, 51));
+        shortDescriptionText.setColumns(20);
+        shortDescriptionText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        shortDescriptionText.setForeground(new java.awt.Color(255, 255, 255));
+        shortDescriptionText.setLineWrap(true);
+        shortDescriptionText.setRows(5);
+        shortDescriptionText.setWrapStyleWord(true);
+        jScrollPane1.setViewportView(shortDescriptionText);
+
+        commentPanel1.setBackground(new java.awt.Color(51, 51, 51));
+
+        jTextArea5.setBackground(new java.awt.Color(51, 51, 51));
+        jTextArea5.setColumns(20);
+        jTextArea5.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jTextArea5.setForeground(new java.awt.Color(255, 255, 255));
+        jTextArea5.setLineWrap(true);
+        jTextArea5.setRows(5);
+        jTextArea5.setText("     Add comment...");
+        jTextArea5.setBorder(null);
+        jTextArea5.setDisabledTextColor(new java.awt.Color(51, 51, 51));
+        jTextArea5.setSelectionColor(new java.awt.Color(51, 51, 51));
+        jScrollPane7.setViewportView(jTextArea5);
+
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("COMMENTS");
+
+        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jButton1.setForeground(new java.awt.Color(255, 255, 255));
+        jButton1.setText("ADD");
+        jButton1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 95, 90)));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jSpinner1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jSpinner1.setModel(new javax.swing.SpinnerNumberModel(1, 1, 5, 1));
+        jSpinner1.setBorder(null);
+
+        jScrollPane2.setBackground(new java.awt.Color(51, 51, 51));
+
+        jTable1.setBackground(new java.awt.Color(51, 51, 51));
+        jTable1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "User Name", "Comment", "Point"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setAutoscrolls(false);
+        jTable1.setEnabled(false);
+        jTable1.setFocusable(false);
+        jTable1.setRowSelectionAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+        }
+
+        javax.swing.GroupLayout commentPanel1Layout = new javax.swing.GroupLayout(commentPanel1);
+        commentPanel1.setLayout(commentPanel1Layout);
+        commentPanel1Layout.setHorizontalGroup(
+            commentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(commentPanel1Layout.createSequentialGroup()
+                .addGroup(commentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane7, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1156, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commentPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(commentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commentPanel1Layout.createSequentialGroup()
+                                .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commentPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 973, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(127, 127, 127)))))
+                .addContainerGap())
+        );
+        commentPanel1Layout.setVerticalGroup(
+            commentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, commentPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(commentPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jSpinner1)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 525, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43))
+        );
+
+        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\emrec\\OneDrive\\Masaüstü\\airbnb_desktop\\src\\main\\img\\img\\main_logo_1.png")); // NOI18N
+
+        jButton2.setBackground(new java.awt.Color(51, 51, 51));
+        jButton2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("RENT");
+        jButton2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(250, 95, 90)));
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        hireStartDate.setBackground(new java.awt.Color(51, 51, 51));
+        hireStartDate.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Start Date", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        hireStartDate.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            hireStartDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("## ## ####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        hireStartDate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        hireStartDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                hireStartDateActionPerformed(evt);
+            }
+        });
+
+        hireFinishDate.setBackground(new java.awt.Color(51, 51, 51));
+        hireFinishDate.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Finish Date", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("SansSerif", 1, 14), new java.awt.Color(255, 255, 255))); // NOI18N
+        hireFinishDate.setForeground(new java.awt.Color(255, 255, 255));
+        try {
+            hireFinishDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("## ## ####")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
+        hireFinishDate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+
+        addressText.setEditable(false);
+        addressText.setBackground(new java.awt.Color(51, 51, 51));
+        addressText.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        addressText.setForeground(new java.awt.Color(255, 255, 255));
+        addressText.setText("asdasda");
+        addressText.setToolTipText("");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(advertisementName, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(171, 171, 171)
+                .addComponent(jLabel2)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(commentPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(hireStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(image1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(image2, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(image5, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(image4, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(image6, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(image3, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(hireFinishDate, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(heatingTypeLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(heatingTypeText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(houseTypeLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(houseTypeText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(roomNumberLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
+                                        .addComponent(roomNumberText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(vehicleParkLabel)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(vehicleParkText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel2Layout.createSequentialGroup()
+                                    .addComponent(shortDescriptionLabel)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dailyPriceLabel)
+                                    .addComponent(addressLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(dailyPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addressText, javax.swing.GroupLayout.PREFERRED_SIZE, 355, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(54, 54, 54))))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(advertisementName, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addressLabel)
+                            .addComponent(addressText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(dailyPriceLabel)
+                            .addComponent(dailyPriceText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(houseTypeLabel)
+                            .addComponent(houseTypeText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(vehicleParkLabel)
+                            .addComponent(vehicleParkText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(heatingTypeLabel)
+                            .addComponent(heatingTypeText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(roomNumberLabel)
+                            .addComponent(roomNumberText, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(shortDescriptionLabel)
+                                .addGap(18, 18, 18)
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(image1, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(image2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(image3, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(image6, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(image5, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(image4, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(38, 38, 38)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(hireStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(hireFinishDate, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                .addComponent(commentPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0))
+        );
+
+        contentScroll.setViewportView(jPanel2);
+
+        jPanel1.add(contentScroll, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 1280, 770));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1320, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+
+    private void image1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image1ActionPerformed
+
+//        image1.setPreferredSize(new Dimension(500, 500));
+//        image1.show();
+
+    }//GEN-LAST:event_image1ActionPerformed
+
+    private void image2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image2ActionPerformed
+
+    private void image3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image3ActionPerformed
+
+    private void image4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image4ActionPerformed
+
+    private void image5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image5ActionPerformed
+
+    private void image6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_image6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image6ActionPerformed
+
+    private void image3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_image3MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image3MouseClicked
+
+    private void image2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_image2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_image2MouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        if (personId != 0) {
+            if (jTextArea5.getText().length() <= 185) {
+                Comment postComment = new Comment();
+                postComment.setContent(jTextArea5.getText());
+                postComment.setPersonId(personId);
+                postComment.setPoint((int) jSpinner1.getValue());
+                postComment.setAdvertisementId(advertisementId);
+                postComment.post();
+                populateCommentTable();
+            } else {
+                JOptionPane.showMessageDialog(null, "Please Short Your Comment");
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Please Log In For Make A Comment");
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        if (!isCommentZoom) {
+            TableModel model = jTable1.getModel();
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(1200);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(0);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(0);
+
+            jTable1.setFont(new FontUIResource(Font.SANS_SERIF, Font.BOLD, 11));
+            isCommentZoom = true;
+        } else {
+
+            TableModel model = jTable1.getModel();
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(250);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(250);
+
+            jTable1.setFont(new FontUIResource(Font.SANS_SERIF, Font.BOLD, 14));
+            isCommentZoom = false;
+
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void image1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_image1MouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_image1MouseClicked
+
+    private long dayAmountController() {
+        SimpleDateFormat myFormat = new SimpleDateFormat("dd MM yyyy");
+        String inputString1 = hireStartDate.getText();
+        String inputString2 = hireFinishDate.getText();
+
+        String[] element = inputString1.split(" ");
+        String[] element2 = inputString2.split(" ");
+        if (Integer.parseInt(element[0]) > 30 || Integer.parseInt(element[1]) > 12 || Integer.parseInt(element[1]) == 0 || Integer.parseInt(element[0]) == 0) {
+            JOptionPane.showMessageDialog(null, "Please Enter Valid Date For Start");
+        } else if (Integer.parseInt(element2[0]) > 30 || Integer.parseInt(element2[1]) > 12 || Integer.parseInt(element2[1]) == 0 || Integer.parseInt(element2[0]) == 0) {
+            JOptionPane.showMessageDialog(null, "Please Enter Valid Date For Finish");
+        } else {
+            try {
+                Date date1 = myFormat.parse(inputString1);
+
+                Date date2 = myFormat.parse(inputString2);
+                long diff = date2.getTime() - date1.getTime();
+                return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+            } catch (ParseException e) {
+            }
+
+        }
+
+        return 0;
+
+    }
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        ad = ad.showDetailedInfo(advertisementId);
+        if (hireStartDate.getText().equalsIgnoreCase("          ") || hireFinishDate.getText().equalsIgnoreCase("          ")) {
+            JOptionPane.showMessageDialog(null, "Please Enter Date For Rent");
+
+        } else {
+            long dayAmount = dayAmountController();
+            if (personId != ad.getHouseOwnerId()) {
+                if (personId != 0) {
+                    if (dayAmount > 30) {
+                        JOptionPane.showMessageDialog(null, "You can rent most 30 day");
+                    }else {
+                        ad.setHireStart(hireStartDate.getText());
+                        ad.setHireFinish(hireFinishDate.getText());
+                        long totalPrice = ad.getPrice() * dayAmount;
+                        if (ad.getAdvertisementType().equalsIgnoreCase("apartment")) {
+                            Apartment apartment = new Apartment();
+                            apartment.rent((int) totalPrice, ad, personId);
+                        } else if (ad.getAdvertisementType().equalsIgnoreCase("manor")) {
+                            Manor manor = new Manor();
+                            manor.rent((int) totalPrice, ad, personId);
+                        } else if (ad.getAdvertisementType().equalsIgnoreCase("villa")) {
+                            Villa villa = new Villa();
+                            villa.rent((int) totalPrice, ad, personId);
+                        } else if (ad.getAdvertisementType().equalsIgnoreCase("tree house")) {
+                            TreeHouse tree = new TreeHouse();
+                            tree.rent((int) totalPrice, ad, personId);
+                        }
+                        JOptionPane.showMessageDialog(null, "House Rented , Have Enjoy Time And Thansk For Selected Us");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please Log In For Rent");
+
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "You can not rent your own house");
+
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void deleteButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_deleteButtonMouseClicked
+        // TODO add your handling code here:
+        ad.delete();
+        HomeScreen home = new HomeScreen(new HouseOwner().getUserById(personId));
+        this.dispose();
+        home.show();
+    }//GEN-LAST:event_deleteButtonMouseClicked
+
+    private void hireStartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_hireStartDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_hireStartDateActionPerformed
+
+    private void updateButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_updateButtonMouseClicked
+        // TODO add your handling code here:
+        this.dispose();
+        HouseOwner houseOwner = new HouseOwner();
+        houseOwner = houseOwner.getUserById(personId);
+        AdvertisementUpdateScreen adUp = new AdvertisementUpdateScreen(houseOwner, ad);
+        adUp.show();
+
+
+    }//GEN-LAST:event_updateButtonMouseClicked
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_updateButtonActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(AdvertisementDetailScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(AdvertisementDetailScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(AdvertisementDetailScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(AdvertisementDetailScreen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new AdvertisementDetailScreen().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel addressLabel;
+    private javax.swing.JTextField addressText;
+    private javax.swing.JLabel advertisementName;
+    private javax.swing.JPanel commentPanel1;
+    private javax.swing.JScrollPane contentScroll;
+    private javax.swing.JLabel dailyPriceLabel;
+    private javax.swing.JTextField dailyPriceText;
+    private javax.swing.JButton deleteButton;
+    private javax.swing.JLabel heatingTypeLabel;
+    private javax.swing.JTextField heatingTypeText;
+    private javax.swing.JFormattedTextField hireFinishDate;
+    private javax.swing.JFormattedTextField hireStartDate;
+    private javax.swing.JLabel houseTypeLabel;
+    private javax.swing.JTextField houseTypeText;
+    private javax.swing.JButton image1;
+    private javax.swing.JButton image2;
+    private javax.swing.JButton image3;
+    private javax.swing.JButton image4;
+    private javax.swing.JButton image5;
+    private javax.swing.JButton image6;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JSpinner jSpinner1;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JTextArea jTextArea5;
+    private javax.swing.JLabel roomNumberLabel;
+    private javax.swing.JTextField roomNumberText;
+    private javax.swing.JLabel shortDescriptionLabel;
+    private javax.swing.JTextArea shortDescriptionText;
+    private javax.swing.JButton updateButton;
+    private javax.swing.JLabel vehicleParkLabel;
+    private javax.swing.JTextField vehicleParkText;
+    // End of variables declaration//GEN-END:variables
+}
